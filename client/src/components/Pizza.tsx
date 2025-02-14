@@ -1,11 +1,9 @@
 import { motion } from "framer-motion";
 
 import assets from "../assets";
-import type { Ingredient, Ingredients } from "../types";
+import useStore from "../hooks/useStore";
+import type { Ingredient } from "../types";
 
-interface IPizza {
-    ingredients: Ingredients
-}
 
 interface IPizzaIngredient {
     ingredient: Ingredient,
@@ -36,11 +34,14 @@ function PizzaIngredient({ ingredient, value }: IPizzaIngredient) {
 
 }
 
-export default function Pizza({ ingredients }: IPizza) {
+export default function Pizza() {
+    const ingredients = useStore(store => store.ingredients)
+    const results = useStore(store => store.results)
+
     return (
         <div style={{ flex: 1, padding: 40 }}>
             <div style={{ position: "relative" }}>
-                {Object.entries(ingredients).slice(0, -1).map(([ingredient, value]) => (
+                {Object.entries(results ?? ingredients).slice(0, -1).map(([ingredient, value]) => (
                     <PizzaIngredient ingredient={ingredient as Ingredient} value={value} key={`ingridient_${ingredient}_${value}`} />
                 ))}
 

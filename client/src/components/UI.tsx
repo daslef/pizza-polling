@@ -1,19 +1,14 @@
-import React from 'react'
 import { useMutation } from '@tanstack/react-query'
 
+import useStore from '../hooks/useStore'
 import assets from '../assets'
-import type { Ingredient, Ingredients } from "../types"
+import type { Ingredient } from "../types"
 
-interface IUI {
-    ingredients: Ingredients
-    setIngredients: React.Dispatch<React.SetStateAction<Ingredients>>
-    setShowResult: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-const UI: React.FC<IUI> = ({ ingredients, setIngredients, setShowResult }) => {
-    const increment = (ingredient: Ingredient) => {
-        setIngredients((state) => ({ ...state, [ingredient]: state[ingredient] + 1 }))
-    }
+export default function UI() {
+    const increment = useStore(store => store.increment)
+    const ingredients = useStore(store => store.ingredients)
+    const setShowResult = useStore(store => store.setShowResult)
+    const toggle = useStore(store => store.toggle)
 
     const mutation = useMutation({
         mutationFn: async () => fetch('http://localhost:3000/vote', {
@@ -24,7 +19,7 @@ const UI: React.FC<IUI> = ({ ingredients, setIngredients, setShowResult }) => {
             body: JSON.stringify(ingredients),
         }),
         onSuccess: () => {
-            setShowResult(true)
+            setShowResult()
         }
     })
 
@@ -42,9 +37,7 @@ const UI: React.FC<IUI> = ({ ingredients, setIngredients, setShowResult }) => {
                 <input
                     type="checkbox"
                     checked={Boolean(ingredients["cheese"])}
-                    onChange={() =>
-                        setIngredients((state) => ({ ...state, cheese: Number(!state.cheese) }))
-                    }
+                    onChange={() => toggle()}
                 />
             </label>
 
@@ -60,5 +53,3 @@ const UI: React.FC<IUI> = ({ ingredients, setIngredients, setShowResult }) => {
         </div>
     )
 }
-
-export default UI
