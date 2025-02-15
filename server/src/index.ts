@@ -10,50 +10,29 @@ import type { Ingredient, Ingredients } from './types'
 const eventEmitter = new EventEmitter()
 const app = new Hono()
 
-
-const store = {
-  ingredients: {
-    basil: 0,
-    mushroom: 0,
-    olive: 0,
-    pineapple: 0,
-    tomato: 0,
-    cheese: 0,
-  },
-  votes: 0,
-  getAverage: function () {
-    return Object.entries(this.ingredients).reduce((acc, [ingredient, value]) => {
-      const averageValue = isNaN(value / this.votes) ? 0 : Math.floor(value / this.votes)
-      return { ...acc, [ingredient]: averageValue }
-    }, {})
-  }
+interface Store {
+  ingredients: Ingredients,
+  votes: number,
+  getAverage: () => Ingredients
 }
+
+// TODO: implement Store 
 
 app.use(cors({
   origin: '*'
 }))
 
 app.use('/votes/*', async (c, next) => {
-  c.header('Content-Type', 'text/event-stream');
-  c.header('Cache-Control', 'no-cache');
-  c.header('Connection', 'keep-alive');
-
+  // TODO: implement text/event-stream without cache keep-alived connection
   return await next();
 });
 
 app.get('/votes', async (c) => {
   return streamSSE(c, async (stream) => {
-    const sendEventToClient = async () => {
-      await stream.writeSSE({ data: JSON.stringify({ results: store.getAverage() }) });
-    };
+    // TODO: implement sendEvent via writeSSE({ data: ... })
 
-    eventEmitter.on("votesUpdated", sendEventToClient);
-
-    stream.writeSSE({ data: JSON.stringify({ results: store.getAverage() }) });
-
-    stream.onAbort(() => {
-      eventEmitter.off("message", sendEventToClient);
-    });
+    // TODO: add handler to updates
+    // TODO: write initial state
 
     while (true) {
       await stream.sleep(200);
@@ -62,15 +41,8 @@ app.get('/votes', async (c) => {
 })
 
 app.post('/vote', async (c) => {
-  const voteData: Ingredients = await c.req.json()
-
-  for (const ingredient in voteData) {
-    store.ingredients[ingredient as Ingredient] += voteData[ingredient as Ingredient]
-  }
-
-  store.votes++
-
-  eventEmitter.emit("votesUpdated");
+  // TODO: parse incoming data, add to store, increment counter
+  // TODO: emit update event
 
   return c.json({ status: 201 })
 })
