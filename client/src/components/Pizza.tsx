@@ -16,7 +16,7 @@ function PizzaIngredient({ ingredient, value }: IPizzaIngredient) {
 
     return (
         <>
-            {Array.from({ length: value }, (_, ix) => ix).map(index => (
+            {Array.from({ length: Math.min(value, assets[ingredient].length) }, (_, ix) => ix).map(index => (
                 <motion.div
                     initial={{ opacity: 0.5, y: 100 }}
                     animate={{

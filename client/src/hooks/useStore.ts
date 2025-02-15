@@ -1,11 +1,23 @@
 import { create } from "zustand";
+import { devtools } from 'zustand/middleware'
 
 import type { Ingredient, Ingredients } from "../types";
 
-import { combine } from 'zustand/middleware'
+interface StoreState {
+    ingredients: Ingredients,
+    results: Ingredients | null,
+    showResult: boolean,
+}
 
-const useStore = create(
-    combine({
+interface StoreActions {
+    increment: (ingredient: Ingredient) => void,
+    toggle: (ingredient: Ingredient) => void,
+    setShowResult: () => void,
+    setResults: (results: Ingredients) => void
+}
+
+const useStore = create<StoreState & StoreActions>()(
+    devtools((set, get) => ({
         ingredients: {
             basil: 0,
             mushroom: 0,
@@ -15,14 +27,12 @@ const useStore = create(
             cheese: 0,
         },
         results: null,
-        showResult: false
-    }, (set) => ({
+        showResult: false,
+
         increment: (ingredient: Ingredient) => set((state) => ({ ingredients: { ...state.ingredients, [ingredient]: state.ingredients[ingredient] + 1 } })),
         toggle: (ingredient: Ingredient = "cheese") => set(state => ({ ingredients: { ...state.ingredients, [ingredient]: Number(!state.ingredients[ingredient]) } })),
         setShowResult: () => set({ showResult: true }),
         setResults: (results: Ingredients) => set(() => ({ results }))
-    })),
-)
-
+    })))
 
 export default useStore

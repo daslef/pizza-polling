@@ -9,6 +9,7 @@ export default function UI() {
     const ingredients = useStore(store => store.ingredients)
     const setShowResult = useStore(store => store.setShowResult)
     const toggle = useStore(store => store.toggle)
+    const mutate = useStore(store => store.mutate)
 
     const mutation = useMutation({
         mutationFn: async () => fetch('http://localhost:3000/vote', {
@@ -44,7 +45,6 @@ export default function UI() {
             <button
                 className="button button--submit"
                 onClick={() => {
-                    console.log(ingredients)
                     mutation.mutate()
                 }}
             >
