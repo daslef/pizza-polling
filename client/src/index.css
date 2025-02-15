@@ -18,22 +18,11 @@ body {
 }
 
 .button {
-  appearance: none;
-  border: 2px solid transparent;
-  width: 5vmax;
-  height: 5vmax;
-  min-height: 5vmax;
-  min-width: 5vmax;
-  background-color: white;
-  box-shadow: 0 0 14px rgba(0, 0, 0, 0.2);
-  border-radius: 50%;
-  cursor: pointer;
+  /* implement styling */
 }
 
 .button--submit {
-  color: white;
-  font-weight: bold;
-  font-size: 1.4rem;
+  /* implement styling */
 }
 
 .button__icon {

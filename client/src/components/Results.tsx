@@ -5,18 +5,13 @@ import type { Ingredients } from "../types";
 
 
 export default function Results() {
-    const { isConnected, value: resultsData } = useSSE<{ results: Ingredients }>("http://localhost:3000/votes");
-    const setResults = useStore(store => store.setResults)
-
-    if (!isConnected) return;
-
-    if (resultsData?.results) {
-        setResults(resultsData?.results)
-    }
+    // TODO: connect to SSE with <{ results: Ingredients }>
+    // TODO: if not connected, show nothing
+    // TODO: render value.results
 
     return (
         <div style={{ display: "flex", height: "80vh", alignItems: "center" }}>
-            {resultsData && <Pizza />}
+            <Pizza />
         </div>
     );
 }
